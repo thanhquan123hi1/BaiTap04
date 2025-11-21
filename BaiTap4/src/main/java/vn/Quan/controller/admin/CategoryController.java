@@ -18,7 +18,8 @@ import vn.Quan.utils.Constant;
 @MultipartConfig
 public class CategoryController extends HttpServlet {
 
-    private ICategoryService service = new CategoryService();
+	private static final long serialVersionUID = 1L;
+	private ICategoryService service = new CategoryService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

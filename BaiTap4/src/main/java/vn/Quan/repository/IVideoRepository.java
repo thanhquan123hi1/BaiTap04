@@ -1,23 +1,19 @@
 package vn.Quan.repository;
 
 import java.util.List;
-
 import vn.Quan.entity.VideoEntity;
 
 public interface IVideoRepository {
 
-	List<VideoEntity> searchByTitle(String keyword);
+    List<VideoEntity> findAll();
 
-	List<VideoEntity> findByCategoryId(int categoryId);
+    VideoEntity findById(int id);
 
-	List<VideoEntity> findAll();
+    void create(VideoEntity entity);
 
-	VideoEntity findById(int videoId);
+    void update(VideoEntity entity);
 
-	void delete(int videoId);
+    void delete(int id);
 
-	void update(VideoEntity entity);
-
-	void create(VideoEntity entity);
-
+    List<VideoEntity> searchByTitle(String keyword);
 }

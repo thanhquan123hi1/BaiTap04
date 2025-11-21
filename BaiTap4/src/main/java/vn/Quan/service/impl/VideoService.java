@@ -9,72 +9,49 @@ import vn.Quan.service.IVideoService;
 
 public class VideoService implements IVideoService {
 
-    private IVideoRepository videoRepo = new VideoRepository();
+    private IVideoRepository repo = new VideoRepository();
 
     @Override
-    public void create(VideoEntity video) throws Exception {
+    public void create(VideoEntity v) throws Exception {
+        if (v.getTitle() == null || v.getTitle().isBlank())
+            throw new Exception("Tiêu đề không được trống");
+        if (v.getCategory() == null)
+            throw new Exception("Phải chọn Category");
 
-        if (video.getTitle() == null || video.getTitle().isEmpty()) {
-            throw new Exception("Tiêu đề video không được bỏ trống");
-        }
-
-        if (video.getCategory() == null || video.getCategory().getCategoryId() <= 0) {
-            throw new Exception("Video phải thuộc một category hợp lệ");
-        }
-
-        videoRepo.create(video);
+        repo.create(v);
     }
 
     @Override
-    public void update(VideoEntity video) throws Exception {
+    public void update(VideoEntity v) throws Exception {
+        if (v.getTitle() == null || v.getTitle().isBlank())
+            throw new Exception("Tiêu đề không được trống");
+        if (v.getCategory() == null)
+            throw new Exception("Phải chọn Category");
 
-        VideoEntity old = videoRepo.findById(video.getVideoId());
+        repo.update(v);
+    }
 
-        if (old == null) {
+    @Override
+    public void delete(int id) throws Exception {
+        if (repo.findById(id) == null)
             throw new Exception("Video không tồn tại");
-        }
-
-        if (video.getTitle() == null || video.getTitle().isEmpty()) {
-            throw new Exception("Tiêu đề video không được bỏ trống");
-        }
-
-        if (video.getCategory() == null
-                || video.getCategory().getCategoryId() <= 0) {
-            throw new Exception("Category không hợp lệ");
-        }
-
-        videoRepo.update(video);
+        repo.delete(id);
     }
 
     @Override
-    public void delete(int videoId) throws Exception {
-
-        VideoEntity video = videoRepo.findById(videoId);
-
-        if (video == null) {
-            throw new Exception("Video không tồn tại");
-        }
-
-        videoRepo.delete(videoId);
-    }
-
-    @Override
-    public VideoEntity findById(int videoId) {
-        return videoRepo.findById(videoId);
+    public VideoEntity findById(int id) {
+        return repo.findById(id);
     }
 
     @Override
     public List<VideoEntity> findAll() {
-        return videoRepo.findAll();
+        return repo.findAll();
     }
 
     @Override
-    public List<VideoEntity> findByCategoryId(int categoryId) {
-        return videoRepo.findByCategoryId(categoryId);
-    }
-
-    @Override
-    public List<VideoEntity> searchByTitle(String keyword) {
-        return videoRepo.searchByTitle(keyword);
+    public List<VideoEntity> search(String keyword) {
+        if (keyword == null || keyword.isBlank())
+            return repo.findAll();
+        return repo.searchByTitle(keyword);
     }
 }

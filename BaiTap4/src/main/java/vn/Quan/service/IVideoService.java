@@ -1,22 +1,19 @@
 package vn.Quan.service;
 
 import java.util.List;
-
 import vn.Quan.entity.VideoEntity;
 
 public interface IVideoService {
 
-    void create(VideoEntity video) throws Exception;
+    void create(VideoEntity v) throws Exception;
 
-    void update(VideoEntity video) throws Exception;
+    void update(VideoEntity v) throws Exception;
 
-    void delete(int videoId) throws Exception;
+    void delete(int id) throws Exception;
 
-    VideoEntity findById(int videoId);
+    VideoEntity findById(int id);
 
     List<VideoEntity> findAll();
 
-    List<VideoEntity> findByCategoryId(int categoryId);
-
-    List<VideoEntity> searchByTitle(String keyword);
+    List<VideoEntity> search(String keyword);
 }
