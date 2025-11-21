@@ -2,170 +2,113 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Login Page</title>
+<c:set var="pageTitle" value="Login" />
 
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #74ABE2, #5563DE);
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0;
-    }
+<!-- BEGIN CONTENT -->
+<div class="col-md-9 col-sm-9">
+    <h1>Login</h1>
 
-    form {
-        background-color: #fff;
-        border-radius: 15px;
-        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
-        padding: 40px 50px;
-        width: 350px;
-        animation: fadeIn 0.6s ease-in-out;
-    }
+    <div class="content-form-page">
+        <div class="row">
+            <!-- FORM LOGIN -->
+            <div class="col-md-7 col-sm-7">
 
-    @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(-20px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
+                <!-- FORM: submit đúng Controller -->
+                <form class="form-horizontal form-without-legend"
+                      role="form"
+                      action="${pageContext.request.contextPath}/login"
+                      method="post">
 
-    h2 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 25px;
-    }
+                    <!-- HIỂN THỊ ALERT -->
+                    <c:if test="${alert != null}">
+                        <div class="alert alert-danger">${alert}</div>
+                    </c:if>
 
-    label {
-        font-weight: bold;
-        color: #333;
-        display: block;
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
+                    <div class="form-group">
+                        <label for="email" class="col-lg-4 control-label">
+                            Username <span class="require">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text"
+                                   class="form-control"
+                                   id="email"
+                                   name="uname"
+                                   value="${rememberedUser}"
+                                   required>
+                        </div>
+                    </div>
 
-    input[type=text], input[type=password] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 14px;
-        transition: all 0.3s ease;
-    }
+                    <div class="form-group">
+                        <label for="password" class="col-lg-4 control-label">
+                            Password <span class="require">*</span>
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="password"
+                                   class="form-control"
+                                   id="password"
+                                   name="psw"
+                                   required>
+                        </div>
+                    </div>
 
-    input[type=text]:focus, input[type=password]:focus {
-        border-color: #5563DE;
-        box-shadow: 0 0 5px rgba(85, 99, 222, 0.5);
-        outline: none;
-    }
+                    <!-- Remember me -->
+                    <div class="row">
+                        <div class="col-lg-8 col-md-offset-4 padding-left-0">
+                            <label>
+                                <input type="checkbox" 
+                                       name="remember"
+                                       ${rememberedUser != null ? "checked" : ""}>
+                                Remember me
+                            </label>
+                        </div>
+                    </div>
 
-    button[type=submit], .cancelbtn {
-        background-color: #5563DE;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        padding: 10px;
-        width: 100%;
-        font-size: 15px;
-        margin-top: 15px;
-        transition: background 0.3s ease;
-    }
+                    <!-- QUÊN MẬT KHẨU -->
+                    <div class="row">
+                        <div class="col-lg-8 col-md-offset-4 padding-left-0">
+                            <a href="${pageContext.request.contextPath}/forget">
+                                Forgot Password?
+                            </a>
+                        </div>
+                    </div>
 
-    .cancelbtn {
-        background-color: #aaa;
-    }
+                    <!-- BUTTON LOGIN -->
+                    <div class="row">
+                        <div class="col-lg-8 col-md-offset-4 padding-left-0 padding-top-20">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </div>
 
-    button:hover {
-        background-color: #3c4bc5;
-    }
+                    <!-- SOCIAL LOGIN -->
+                    <div class="row">
+                        <div class="col-lg-8 col-md-offset-4 padding-left-0 padding-top-10 padding-right-30">
+                            <hr>
+                            <div class="login-socio">
+                                <p class="text-muted">or login using:</p>
+                                <ul class="social-icons">
+                                    <li><a href="#" class="facebook" title="facebook"></a></li>
+                                    <li><a href="#" class="twitter" title="Twitter"></a></li>
+                                    <li><a href="#" class="googleplus" title="Google Plus"></a></li>
+                                    <li><a href="#" class="linkedin" title="LinkedIn"></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
-    .cancelbtn:hover {
-        background-color: #888;
-    }
+                </form>
+            </div>
 
-    .login-link {
-        text-align: center;
-        margin-top: 15px;
-        font-size: 14px;
-    }
+            <!-- BÊN PHẢI -->
+            <div class="col-md-4 col-sm-4 pull-right">
+                <div class="form-info">
+                    <h2><em>Important</em> Information</h2>
+                    <p>Duis autem vel eum iriure at dolor vulputate velit esse vel molestie at dolore.</p>
 
-    .login-link a {
-        color: #5563DE;
-        font-weight: bold;
-        text-decoration: none;
-    }
+                    <button type="button" class="btn btn-default">More details</button>
+                </div>
+            </div>
 
-    .remember-section {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-        font-size: 14px;
-    }
-
-    .remember-section a {
-        color: #5563DE;
-        text-decoration: none;
-    }
-
-    .alert {
-        text-align: center;
-        color: #fff;
-        background-color: #e74c3c;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 15px;
-    }
-</style>
-
-</head>
-<body>
-
-    <form action="${pageContext.request.contextPath}/login" method="post">
-        <h2>🔐 Login</h2>
-
-        <c:if test="${alert != null}">
-            <div class="alert">${alert}</div>
-        </c:if>
-
-        <label for="uname"><b>Username</b></label>
-        <input type="text"
-               name="uname"
-               placeholder="Enter Username"
-               value="${rememberedUser}"
-               oninput="this.value = this.value.trimStart()"
-               required>
-
-        <label for="psw"><b>Password</b></label>
-        <input type="password" name="psw" placeholder="Enter Password" required>
-
-        <div class="remember-section">
-            <label>
-                <input type="checkbox" name="remember"
-                       ${rememberedUser != null ? "checked" : ""}>
-                Remember me
-            </label>
-
-            <span class="psw">
-                <a href="${pageContext.request.contextPath}/forget">Forgot password?</a>
-            </span>
         </div>
-
-        <button type="submit">Login</button>
-        <button type="button"
-                class="cancelbtn"
-                onclick="window.location.href='${pageContext.request.contextPath}/'">
-            Cancel
-        </button>
-
-        <div class="login-link">
-            Don't have an account?
-            <a href="${pageContext.request.contextPath}/register">Register</a>
-        </div>
-    </form>
-
-</body>
-</html>
+    </div>
+</div>
+<!-- END CONTENT -->
