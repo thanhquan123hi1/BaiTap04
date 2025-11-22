@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/common/taglib.jsp" %>
+<c:url value="/" var="URL"></c:url>
+
 <!DOCTYPE html>
-<html>
-<head>
 <html lang="en">
 <!-- Head BEGIN -->
 <head>
@@ -39,6 +40,7 @@
   <link href="${URL}assets/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
   <link href="${URL}assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.css" rel="stylesheet">
   <link href="${URL}assets/global/plugins/slider-layer-slider/css/layerslider.css" rel="stylesheet">
+  <link href="${URL}assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
   <!-- Page level plugin styles END -->
 
   <!-- Theme styles START -->
@@ -52,12 +54,12 @@
   <!-- Theme styles END -->
 </head>
 <!-- Head END -->
-</head>
+
 <!-- Body BEGIN -->
 <body class="ecommerce">
     
 	<!--BEGIN HEADER -->
-	<%@ include file="/common/user/header.jsp" %>
+	<%@ include file="/common/web/header.jsp" %>
 	<!-- END HEADER -->
 
     <!-- BEGIN SLIDER -->
@@ -72,9 +74,7 @@
     </div>
 
 
-    <!--BEGIN FOOTER -->
-    <%@ include file="/common/user/footer.jsp" %>
-    <!-- END FOOTER -->
+
 
 
 
@@ -95,6 +95,7 @@
     <script src="${URL}assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.min.js" type="text/javascript"></script><!-- slider for products -->
     <script src='${URL}assets/global/plugins/zoom/jquery.zoom.min.js' type="text/javascript"></script><!-- product zoom -->
     <script src="${URL}assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script><!-- Quantity -->
+    <script src="${URL}assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 
     <!-- BEGIN LayerSlider -->
     <script src="${URL}assets/global/plugins/slider-layer-slider/js/greensock.js" type="text/javascript"></script><!-- External libraries: GreenSock -->
@@ -111,6 +112,7 @@
             LayersliderInit.initLayerSlider();
             Layout.initImageZoom();
             Layout.initTouchspin();
+            Layout.initUniform();
             Layout.initTwitter();
             
             Layout.initFixHeaderWithPreHeader();

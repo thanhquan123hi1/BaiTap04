@@ -2,129 +2,131 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>User Profile</title>
+<style>
+    .profile-card {
+        background: #ffffff;
+        padding: 35px 40px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        width: 100%;
+        margin: 0 auto;
+        min-height: 400px;
+    }
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    .avatar-img {
+        width: 270px;
+        height: 270px;
+        object-fit: cover;
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.12);
+    }
 
-    <style>
-        body { background-color: #fffbea; }
+    .btn-logout {
+        width: 70%;
+        margin-top: 20px;
+        background: #e74c3c;
+        border: none;
+    }
+    .btn-logout:hover {
+        background: #c0392b;
+    }
 
-        .banner {
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(255,152,0,0.35);
-        }
+    .btn-save {
+        background: #ff6a00;
+        border: none;
+    }
+    .btn-save:hover {
+        background: #e65a00;
+    }
+</style>
 
-        .profile-img {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #ffe08a;
-            margin-bottom: 10px;
-        }
 
-        .form-control {
-            border-radius: 10px;
-        }
+<!-- TITLE -->
+<div class="row margin-bottom-40">
+    <div class="col-md-12 text-center">
+        <h1 style="margin-top:40px;">TRANG CÁ NHÂN</h1>
+        <p class="lead">Chào mừng, <strong>${sessionScope.account.username}</strong> 👋</p>
+        <hr style="max-width:300px; margin:auto;"/>
+    </div>
+</div>
 
-        .btn-save {
-            background-color: #ffa000;
-            border: none;
-        }
-        .btn-save:hover {
-            background-color: #ff8f00;
-        }
 
-        .btn-logout {
-            background-color: #ff7043;
-            border: none;
-        }
-        .btn-logout:hover {
-            background-color: #e64a19;
-        }
+<div class="row" style="margin-top: 40px; margin-bottom:80px;">
 
-        .alert-box {
-            background: #ff5252;
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
+    <!-- LEFT SIDE: AVATAR + INFO -->
+    <div class="col-md-4 text-center">
 
-    </style>
-</head>
+        <img src="${pageContext.request.contextPath}/uploads/user/${sessionScope.account.images}"
+             class="avatar-img"
+             onerror="this.src='https://via.placeholder.com/270?text=Avatar'">
 
-<body class="container mt-4">
+        <h3 style="margin-top:20px; text-transform:uppercase;">
+            ${sessionScope.account.fullname}
+        </h3>
 
-    <!-- Banner -->
-    <div class="banner d-flex justify-content-between align-items-center">
-        <div>
-            <h2 class="mb-1">Trang cá nhân</h2>
-            <p class="mb-0">Chào mừng, <b>${sessionScope.account.username}</b> 👋</p>
-        </div>
-        <i class="fa-solid fa-user fa-3x opacity-75"></i>
+        <p style="color:#777;">${sessionScope.account.email}</p>
+
+        <a href="${pageContext.request.contextPath}/logout"
+           class="btn btn-danger btn-logout">
+           <i class="fa fa-sign-out"></i> Đăng xuất
+        </a>
     </div>
 
-    <div class="card p-4 shadow-sm">
 
-        <c:if test="${alert != null}">
-            <div class="alert alert-warning text-center">${alert}</div>
-        </c:if>
+    <!-- RIGHT SIDE: PROFILE FORM -->
+    <div class="col-md-8">
+        <div class="profile-card">
 
-        <div class="text-center">
-            <img src="${pageContext.request.contextPath}/uploads/user/${sessionScope.account.images}"
-                 class="profile-img"
-                 onerror="this.src='https://via.placeholder.com/130?text=No+Img'">
+            <!-- Alert -->
+            <c:if test="${alert != null}">
+                <div class="alert alert-warning">
+                    ${alert}
+                </div>
+            </c:if>
+
+            <form class="form-horizontal form-without-legend"
+                  action="${pageContext.request.contextPath}/user/profile"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Họ & tên</label>
+                    <div class="col-lg-8">
+                        <input type="text" name="fullname"
+                               value="${sessionScope.account.fullname}"
+                               class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Số điện thoại</label>
+                    <div class="col-lg-8">
+                        <input type="text" name="phone"
+                               value="${sessionScope.account.phone}"
+                               class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Ảnh đại diện</label>
+                    <div class="col-lg-8">
+                        <input type="file"
+                               name="images"
+                               class="form-control"
+                               accept="image/*"/>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-save text-white">
+                            <i class="fa fa-save"></i> Lưu thay đổi
+                        </button>
+                    </div>
+                </div>
+
+            </form>
         </div>
-
-        <!-- FORM UPDATE PROFILE -->
-        <form action="${pageContext.request.contextPath}/user/profile"
-              method="post"
-              enctype="multipart/form-data">
-
-            <div class="mb-3">
-                <label class="form-label">Họ & tên</label>
-                <input type="text" class="form-control"
-                       name="fullname"
-                       value="${sessionScope.account.fullname}"
-                       required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Số điện thoại</label>
-                <input type="text" class="form-control"
-                       name="phone"
-                       value="${sessionScope.account.phone}"
-                       required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Ảnh đại diện</label>
-                <input type="file" class="form-control" name="images" accept="image/*">
-            </div>
-
-            <button class="btn btn-save text-white px-4" type="submit">
-                <i class="fa-solid fa-save me-2"></i>Lưu thay đổi
-            </button>
-
-            <a href="${pageContext.request.contextPath}/logout"
-               class="btn btn-logout text-white float-end px-4">
-                <i class="fa-solid fa-right-from-bracket me-1"></i> Đăng xuất
-            </a>
-
-        </form>
     </div>
-
-</body>
-</html>
+</div>
