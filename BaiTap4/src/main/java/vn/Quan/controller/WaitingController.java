@@ -23,7 +23,7 @@ public class WaitingController extends HttpServlet {
         HttpSession session = req.getSession(false);
 
         if (session == null || session.getAttribute(Constant.SESSION_LOGIN) == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
 

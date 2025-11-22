@@ -18,8 +18,8 @@ import vn.Quan.utils.Constant;
 @MultipartConfig
 public class CategoryController extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private ICategoryService service = new CategoryService();
+    private static final long serialVersionUID = 1L;
+    private ICategoryService service = new CategoryService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -29,7 +29,8 @@ public class CategoryController extends HttpServlet {
         String id = req.getParameter("id");
 
         if ("edit".equals(action) && id != null) {
-            req.setAttribute("cate", service.findById(Integer.parseInt(id)));
+            CategoryEntity c = service.findById(Integer.parseInt(id));
+            req.setAttribute("cateEdit", c);
         }
 
         req.setAttribute("list", service.findAll());
@@ -45,21 +46,26 @@ public class CategoryController extends HttpServlet {
         String action = req.getParameter("action");
 
         try {
-            if ("create".equals(action)) {
-                CategoryEntity c = extract(req);
-                service.create(c);
-            } else if ("update".equals(action)) {
-                CategoryEntity c = extract(req);
-                c.setCategoryId(Integer.parseInt(req.getParameter("categoryid")));
-                service.update(c);
-            } else if ("delete".equals(action)) {
-                int id = Integer.parseInt(req.getParameter("categoryid"));
-                service.delete(id);
+            switch (action) {
+                case "create":
+                    service.create(extract(req));
+                    break;
+
+                case "update":
+                    CategoryEntity c = extract(req);
+                    c.setCategoryId(Integer.parseInt(req.getParameter("categoryid")));
+                    service.update(c);
+                    break;
+
+                case "delete":
+                    service.delete(Integer.parseInt(req.getParameter("categoryid")));
+                    break;
             }
 
             resp.sendRedirect(req.getContextPath() + "/admin/categories");
 
         } catch (Exception e) {
+            e.printStackTrace();
             req.setAttribute("alert", e.getMessage());
             req.getRequestDispatcher("/views/admin/category-list.jsp").forward(req, resp);
         }
@@ -73,14 +79,21 @@ public class CategoryController extends HttpServlet {
         c.setCategoryCode(req.getParameter("categorycode"));
         c.setStatus(req.getParameter("status") != null);
 
+        // Upload ảnh
         Part img = req.getPart("images");
         if (img != null && img.getSize() > 0) {
-            Files.createDirectories(Paths.get(Constant.DIR));
-            String name = System.currentTimeMillis() + "_" + img.getSubmittedFileName();
-            img.write(Constant.DIR + "/" + name);
-            c.setImages(name);
+
+            String uploadPath = req.getServletContext().getRealPath("/uploads/category");
+            Files.createDirectories(Paths.get(uploadPath));
+
+            String fileName = System.currentTimeMillis() + "_" + img.getSubmittedFileName();
+
+            img.write(uploadPath + "/" + fileName);
+
+            c.setImages(fileName);
         }
 
         return c;
     }
 }
+
